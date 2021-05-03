@@ -1185,6 +1185,7 @@ class RowPanel(Panel):
 
     :param title: title of the panel
     :param panels: list of panels in the row
+    :param collapsed: defines if panel is collapsed
     """
 
     panels = attr.ib(default=attr.Factory(list), validator=instance_of(list))
@@ -1195,11 +1196,13 @@ class RowPanel(Panel):
     def _map_panels(self, f):
         self = f(self)
         return attr.evolve(self, panels=list(map(f, self.panels)))
+    
+    collapsed = attr.ib(default=False)
 
     def to_json_data(self):
         return self.panel_json(
             {
-                'collapsed': False,
+                'collapsed': self.collapsed,
                 'panels': self.panels,
                 'type': ROW_TYPE
             }
